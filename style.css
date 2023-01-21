@@ -1,0 +1,70 @@
+/* Custom styles for this page */
+body {
+  background-color: #f8f8f8;
+}
+/* Top bar */
+.top-bar {
+  background-color: #242424;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+.top-bar img {
+  height: 40px;
+  margin-right: 10px;
+}
+.top-bar h2 {
+  color: white;
+  margin: 0;
+  font-weight: 200;
+  font-size: Open Sans,sans-serif;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+/* Form */
+.form-container {
+  background-color: #E6E6E6;
+  padding: 20px;
+  border-radius: 5px;
+  display: inline-block;
+  width: 40%;
+  color: #0084A5;
+}
+/* Chart */
+#doughnut-chart {
+  display: inline-block;
+  width: 50%;
+  margin-left: 10px;
+}
+.form-container input[type="datetime-local"] {
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  margin-bottom: 10px;
+  color: #2ab06f;
+}
+.form-container input[type="password"], .form-container input[type="text"] {
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  margin-bottom: 10px;
+  width: 100%;
+  color: #242424;
+}
+.form-container button {
+  background-color: #00a1b2;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.form-container .required {
+  color: #00A1B2;
+}
+
+.row {
+  margin-top: 2rem;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DT Problems</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="top-bar">
+    <img _ngcontent-barista-design-system-c104=""
+      src="https://dt-cdn.net/images/dynatrace-logo-rgb-cnh-800x142px-8ad53ac283.svg" alt="Dynatrace logo" width="160"
+      class="ba-nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#b7b7b7" width="45">
+      <path
+        d="M335.531 64H176.473L64.002 176.476V335.53L176.472 448h159.059l112.467-112.47V176.476L335.531 64zM284 376h-56v-56.002h56V376zm0-108h-56V136h56v132z" />
+    </svg>
+    <h2>
+      Problems
+    </h2>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 form-container">
+          <div class="text-right">
+            <span class="required">* Campos requeridos</span>
+          </div>
+        </br>
+          <input type="text" id="tenant" name="tenant" placeholder="tenant.live.dynatrace.com" required>
+        </br>
+          <input type="password" id="token" name="token" placeholder="Token dt0c01.####" required>
+        </br>
+          <label>from</label> <input type="datetime-local" name="from">
+          <label>to</label> <input type="datetime-local" name="to">
+        </br>
+          
+          <button onclick="report()">
+            Ejecutar
+          </button>
+      </div>
+      <div class="col-md-6">
+        <canvas id="doughnut-chart"></canvas>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="app.js"></script>
+  </div>
+</body>
+
+</html>
