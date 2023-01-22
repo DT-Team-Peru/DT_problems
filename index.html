@@ -24,21 +24,23 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 form-container">
+        <form onsubmit="report(event)">
           <div class="text-right">
             <span class="required">* Campos requeridos</span>
           </div>
-        </br>
+          </br>
           <input type="text" id="tenant" name="tenant" placeholder="tenant.live.dynatrace.com" required>
-        </br>
+          </br>
           <input type="password" id="token" name="token" placeholder="Token dt0c01.####" required>
-        </br>
-          <label>from</label> <input type="datetime-local" name="from">
-          <label>to</label> <input type="datetime-local" name="to">
-        </br>
-          
-          <button onclick="report()">
+          </br>
+          <label>from</label> <input type="datetime-local" name="from" id="from" required>
+          <label>to</label> <input type="datetime-local" name="to" id="to" required>
+          </br>
+  
+          <button type="submit">
             Ejecutar
           </button>
+        </form>
       </div>
       <div class="col-md-6">
         <canvas id="doughnut-chart"></canvas>
