@@ -1,47 +1,28 @@
 
-var n_problems_close = 0;
-var n_problems_open = 0;
-
-var tenant = "";
-var token = "";
-
-function data_request(){
-    headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        "Authorization": "Api-Token "+token
-      };
-    
-    fetch("https://"+tenant+"/api/v2/problems?from=2022-12-05T00%3A00&to=2023-01-21T00%3A00&problemSelector=status%28%22open%22%29", {
-      method: "GET",
-      headers: headers
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data['totalCount']);
-        n_problems_open = data['totalCount'];
-    })
-      .catch(error => console.log(error));
-    
-    fetch("https://"+tenant+"/api/v2/problems?from=2022-12-05T00%3A00&to=2023-01-21T00%3A00&problemSelector=status%28%22closed%22%29", {
-        method: "GET",
-        headers: headers
-      })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data['totalCount']);
-            n_problems_close = data['totalCount']
-        })
-        .catch(error => console.log(error));
-      
-        
+async function requestAPI(url, headers) {
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: headers
+        });
+        const jsonData = await response.json();
+        return jsonData;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
-function doughnut_report(){
+async function doughnut_report(tenant, headers) {
+    const jsonDataClose = await requestAPI("https://" + tenant + "/api/v2/problems?from=2022-12-05T00%3A00&to=2023-01-21T00%3A00&problemSelector=status%28%22closed%22%29", headers);
+    n_problems_close = jsonDataClose.totalCount;
+    const jsonDataOpen = await requestAPI("https://" + tenant + "/api/v2/problems?from=2022-12-05T00%3A00&to=2023-01-21T00%3A00&problemSelector=status%28%22open%22%29", headers);
+    n_problems_open = jsonDataOpen.totalCount;
+
     var ctx = document.getElementById('doughnut-chart').getContext('2d');
     var chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Closed: '+n_problems_close, 'Open: '+n_problems_open],
+            labels: ['Closed: ' + n_problems_close, 'Open: ' + n_problems_open],
             datasets: [{
                 label: '# of Issues',
                 data: [n_problems_close, n_problems_open],
@@ -64,9 +45,12 @@ function doughnut_report(){
     });
 }
 
-function report(){
+function report() {
     tenant = document.getElementById('tenant').value;
     token = document.getElementById('token').value;
-    data_request();
-    doughnut_report();
+    var headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        "Authorization": "Api-Token " + token
+    };
+    doughnut_report(tenant, headers);
 }
