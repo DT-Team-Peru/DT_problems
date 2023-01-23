@@ -90,9 +90,49 @@ async function report(event) {
 
     n_problems_close = problems_details.reduce((count, problem) => problem.status === 'CLOSED' ? count + 1 : count, 0);
     n_problems_open = problems_details.reduce((count, problem) => problem.status === 'OPEN' ? count + 1 : count, 0);
-    console.log(n_problems_close);
-    console.log(n_problems_open);
-
 
     doughnut_report(n_problems_close, n_problems_open);
+
+    var container = document.getElementById('hot-app');
+    container.innerHTML = "";
+    var hot = new Handsontable(container, {
+        data: jsonDataClose.problems,
+        colHeaders: ['displayId', 'title', 'impactLevel', 'severityLevel', 'status', 'startTime', 'endTime'],
+        columns: [
+            { data: 'displayId', type: 'text' },
+            { data: 'title', type: 'text' },
+            { data: 'impactLevel', type: 'text' },
+            { data: 'severityLevel', type: 'text' },
+            {
+                data: 'status',
+                renderer: function (instance, td, row, col, prop, value, cellProperties) {
+                    if (value === 'OPEN') {
+                        td.style.color = '#FF6384';
+                    } else if (value === 'CLOSED') {
+                        td.style.color = '#36A2EB';
+                    }
+                    td.innerHTML = value;
+                    return td;
+                }
+            },
+            {
+                data: 'startTime',
+                renderer: function (instance, td, row, col, prop, value, cellProperties) {
+                    var date = new Date(value);
+                    td.innerHTML = date.toLocaleString();
+                    return td;
+                }
+            },
+            {
+                data: 'endTime',
+                renderer: function (instance, td, row, col, prop, value, cellProperties) {
+                    var date = new Date(value);
+                    td.innerHTML = date.toLocaleString();
+                    return td;
+                }
+            },
+        ],
+        licenseKey: 'non-commercial-and-evaluation',
+        filters: true,
+    });
 }

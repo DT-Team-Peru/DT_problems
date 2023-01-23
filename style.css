@@ -68,3 +68,12 @@ body {
 .row {
   margin-top: 2rem;
 }
+
+.htCore {
+  margin: 0 auto;
+}
+
+.htCore td {
+  padding: 15px;
+  font-size: 15px;
+}
