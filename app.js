@@ -132,7 +132,9 @@ async function report(event) {
                 }
             },
         ],
-        licenseKey: 'non-commercial-and-evaluation',
+        rowHeaders: true,
+        dropdownMenu: true,
         filters: true,
+        licenseKey: 'non-commercial-and-evaluation'
     });
 }
