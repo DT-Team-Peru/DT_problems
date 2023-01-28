@@ -8,16 +8,22 @@ async function requestAPI(url, headers) {
         const jsonData = await response.json();
         return jsonData;
     } catch (error) {
-        console.log(error);
+        //console.log(error);
     }
 }
 
 function formatDate(dateTimeInput) {
     let date = new Date(dateTimeInput);
     let formattedDateTime = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0') + 'T' + date.getHours().toString().padStart(2, '0') + '%3A' + date.getMinutes().toString().padStart(2, '0');
-    console.log(formattedDateTime);
     return formattedDateTime;
 }
+
+var inputValue;
+
+document.getElementById("token").addEventListener("input", Event => {
+    inputValue = document.getElementById("token").value;
+    document.getElementById("token").value = "**no está permitido ver el token**";
+});
 
 // funciones de graficado y publicación de data
 function doughnut_report(n_problems_close, n_problems_open) {
@@ -77,7 +83,8 @@ function doughnut_report(n_problems_close, n_problems_open) {
 async function report(event) {
     event.preventDefault();
     tenant = document.getElementById('tenant').value;
-    token = document.getElementById('token').value;
+    //token = document.getElementById('token').value;
+    token = inputValue;
     var headers = {
         'Content-Type': 'application/json; charset=utf-8',
         "Authorization": "Api-Token " + token
