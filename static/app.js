@@ -97,7 +97,7 @@ async function report(event) {
     };
     from_date = formatDate(document.getElementById('from').value);
     to_date = formatDate(document.getElementById('to').value);
-    
+
     const loadingDiv = document.createElement("div");
     loadingDiv.setAttribute("id", "loading");
 
@@ -111,7 +111,7 @@ async function report(event) {
     url = "https://" + tenant + "/api/v2/problems?pageSize=500&from=" + from_date + "&to=" + to_date;
     problems_details = [];
 
-    while (url){
+    while (url) {
         const jsonData = await requestAPI(url, headers);
         problems_details = problems_details.concat(jsonData.problems);
         url = jsonData.nextPageKey ? `https://${tenant}/api/v2/problems?nextPageKey=${jsonData.nextPageKey}` : null;
@@ -126,8 +126,16 @@ async function report(event) {
     container.innerHTML = "";
     var hot = new Handsontable(container, {
         data: problems_details,
-        colHeaders: ['displayId', 'title', 'impactLevel', 'severityLevel', 'status', 'startTime', 'endTime'],
+        colHeaders: ['details', 'displayId', 'title', 'impactLevel', 'severityLevel', 'status', 'startTime', 'endTime'],
         columns: [
+            {
+                data: 'problemId',
+                type: 'text',
+                renderer: function (instance, td, row, col, prop, value, cellProperties) {
+                    td.innerHTML = '<a href="#" onclick="event.preventDefault(); problem_details(\'' + value + '\');">click</a>';
+                    return td;
+                }
+            },
             { data: 'displayId', type: 'text' },
             { data: 'title', type: 'text' },
             { data: 'impactLevel', type: 'text' },
@@ -176,4 +184,20 @@ async function report(event) {
     });
 
     document.getElementById("loading").remove();
+}
+
+async function problem_details(problem_id) {
+    const popUp = window.open('', 'popUpWindow', 'height=200,width=200');
+
+    tenant = document.getElementById('tenant').value;
+    token = inputValue;
+    var headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        "Authorization": "Api-Token " + token
+    };
+    url = "https://" + tenant + "/api/v2/problems/"+problem_id;
+    const jsonDetails = await requestAPI(url, headers);
+    console.log(jsonDetails);
+    
+    popUp.document.write(jsonDetails.title);
 }
