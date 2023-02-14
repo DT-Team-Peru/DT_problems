@@ -91,9 +91,25 @@ async function report(event) {
     };
     from_date = formatDate(document.getElementById('from').value);
     to_date = formatDate(document.getElementById('to').value);
+    
+    const loadingDiv = document.createElement("div");
+    loadingDiv.setAttribute("id", "loading");
 
-    const jsonDataClose = await requestAPI("https://" + tenant + "/api/v2/problems?from=" + from_date + "&to=" + to_date, headers);
-    problems_details = jsonDataClose.problems;
+    const loadingImg = document.createElement("img");
+    loadingImg.setAttribute("src", "static/images/loading-icon.gif");
+
+    loadingDiv.appendChild(loadingImg);
+    document.body.appendChild(loadingDiv);
+
+
+    url = "https://" + tenant + "/api/v2/problems?pageSize=500&from=" + from_date + "&to=" + to_date;
+    problems_details = [];
+
+    while (url){
+        const jsonData = await requestAPI(url, headers);
+        problems_details = problems_details.concat(jsonData.problems);
+        url = jsonData.nextPageKey ? `https://${tenant}/api/v2/problems?nextPageKey=${jsonData.nextPageKey}` : null;
+    }
 
     n_problems_close = problems_details.reduce((count, problem) => problem.status === 'CLOSED' ? count + 1 : count, 0);
     n_problems_open = problems_details.reduce((count, problem) => problem.status === 'OPEN' ? count + 1 : count, 0);
@@ -103,7 +119,7 @@ async function report(event) {
     var container = document.getElementById('hot-app');
     container.innerHTML = "";
     var hot = new Handsontable(container, {
-        data: jsonDataClose.problems,
+        data: problems_details,
         colHeaders: ['displayId', 'title', 'impactLevel', 'severityLevel', 'status', 'startTime', 'endTime'],
         columns: [
             { data: 'displayId', type: 'text' },
@@ -133,8 +149,13 @@ async function report(event) {
             {
                 data: 'endTime',
                 renderer: function (instance, td, row, col, prop, value, cellProperties) {
-                    var date = new Date(value);
-                    td.innerHTML = date.toLocaleString();
+                    if (value < 0) {
+                        td.innerHTML = '';
+                        value = '';
+                    } else {
+                        var date = new Date(value);
+                        td.innerHTML = date.toLocaleString();
+                    }
                     return td;
                 }
             },
@@ -142,6 +163,11 @@ async function report(event) {
         rowHeaders: true,
         dropdownMenu: true,
         filters: true,
-        licenseKey: 'non-commercial-and-evaluation'
+        licenseKey: 'non-commercial-and-evaluation',
+        stretchH: 'all',
+        height: 'auto',
+        width: '100%'
     });
+
+    document.getElementById("loading").remove();
 }

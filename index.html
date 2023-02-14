@@ -2,16 +2,15 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DT Problems</title>
-  <link rel="stylesheet" href="static/style.css">
   <link rel="stylesheet" href="static/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="static/style.css">
 </head>
 
 <body>
   <div class="top-bar">
-    <img _ngcontent-barista-design-system-c104=""
-      src="static/images/dynatrace-logo.svg" alt="Dynatrace logo" width="160"
-      class="ba-nav-logo">
+    <img src="static/images/dynatrace-logo.svg" alt="Dynatrace logo" width="160" class="ba-nav-logo">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#b7b7b7" width="45">
       <path
         d="M335.531 64H176.473L64.002 176.476V335.53L176.472 448h159.059l112.467-112.47V176.476L335.531 64zM284 376h-56v-56.002h56V376zm0-108h-56V136h56v132z" />
@@ -20,9 +19,9 @@
       Problems
     </h2>
   </div>
-  <div class="container">
+  <div class="container_dt container">
     <div class="row">
-      <div class="col-md-6 form-container">
+      <div class="col-lg-6 col-md-12 form-container">
         <form onsubmit="report(event)">
           <div class="text-right">
             <span class="required">* Campos requeridos</span>
@@ -32,28 +31,40 @@
           </br>
           <input type="password" id="token" name="token" placeholder="Token dt0c01.####" required>
           </br>
-          <label>from</label> <input type="datetime-local" name="from" id="from" required>
-          <label>to</label> <input type="datetime-local" name="to" id="to" required>
+          <div class="form-row">
+            <div class="col-md-6">
+              <label>from</label>
+              <input type="datetime-local" name="from" id="from" required>
+            </div>
+            <div class="col-md-6">
+              <label>to</label>
+              <input type="datetime-local" name="to" id="to" required>
+            </div>
+          </div>
           </br>
-  
+
           <button type="submit">
             Ejecutar
           </button>
         </form>
       </div>
-      <div class="col-md-6">
+      <div class="col-lg-6 col-md-12">
         <canvas id="doughnut-chart"></canvas>
       </div>
     </div>
   </div>
-  <div class="container">
+  <div class="container_dt container">
     <div class="row">
       <div id="hot-app"></div>
     </div>
   </div>
+  <div class="container_dt container">
+    <div class="row">
+    </div>
+  </div>
   <script src="static/Chart.min.js"></script>
   <script type="text/javascript" src="static/handsontable/handsontable.js"></script>
-  <link rel="stylesheet" href="static/handsontable/handsontable.css" charset="UTF-8"/>
+  <link rel="stylesheet" href="static/handsontable/handsontable.css" charset="UTF-8" />
   <script src="static/app.js"></script>
 </body>
 

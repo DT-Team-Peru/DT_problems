@@ -1,7 +1,9 @@
 /* Custom styles for this page */
 body {
   background-color: #f8f8f8;
+  font-family: "Open Sans", sans-serif;
 }
+
 /* Top bar */
 .top-bar {
   background-color: #242424;
@@ -9,33 +11,32 @@ body {
   display: flex;
   align-items: center;
 }
+
 .top-bar img {
   height: 40px;
   margin-right: 10px;
 }
+
 .top-bar h2 {
   color: white;
   margin: 0;
   font-weight: 200;
-  font-size: Open Sans,sans-serif;
   font-size: 24px;
   text-transform: uppercase;
 }
+
 /* Form Container */
 .form-container {
   background-color: #E6E6E6;
   padding: 20px;
   border-radius: 5px;
   display: inline-block;
-  width: 40%;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
   color: #0084A5;
 }
-/* Chart */
-#doughnut-chart {
-  display: inline-block;
-  width: 50%;
-  margin-left: 10px;
-}
+
 .form-container input[type="datetime-local"] {
   border: none;
   border-radius: 5px;
@@ -43,8 +44,11 @@ body {
   color: white;
   margin-bottom: 10px;
   color: #2ab06f;
+  width: 100%;
 }
-.form-container input[type="password"], .form-container input[type="text"] {
+
+.form-container input[type="password"],
+.form-container input[type="text"] {
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -53,6 +57,7 @@ body {
   width: 100%;
   color: #242424;
 }
+
 .form-container button {
   background-color: #00a1b2;
   border: none;
@@ -60,15 +65,23 @@ body {
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
 }
+
 .form-container .required {
   color: #00A1B2;
 }
 
-.row {
-  margin-top: 2rem;
+/* Chart */
+#doughnut-chart {
+  display: inline-block;
+  width: 100%;
+  height: 300px;
+  margin-top: 20px;
 }
 
+/* Hot Table */
 .htCore {
   margin: 0 auto;
 }
@@ -76,4 +89,51 @@ body {
 .htCore td {
   padding: 15px;
   font-size: 15px;
+}
+
+/* Grid Layout */
+.container_dt {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+.col-md-6 {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 10px;
+}
+
+@media only screen and (min-width: 768px) {
+  .col-md-6 {
+    width: 50%;
+  }
+}
+
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+}
+
+#loading img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#hot-app {
+  overflow-x: auto;
+  max-width: 100%;
 }
