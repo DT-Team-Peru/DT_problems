@@ -77,8 +77,8 @@ body {
 #doughnut-chart {
   display: inline-block;
   width: 100%;
-  height: 300px;
-  margin-top: 20px;
+  height: 200px;
+  /*margin-top: 20px;*/
 }
 
 /* Hot Table */

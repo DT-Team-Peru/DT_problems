@@ -27,7 +27,12 @@ document.getElementById("token").addEventListener("input", Event => {
 
 // funciones de graficado y publicación de data
 function doughnut_report(n_problems_close, n_problems_open) {
-    var ctx = document.getElementById('doughnut-chart').getContext('2d');
+    var canvas = document.getElementById('doughnut-chart');
+    if (canvas.chart) {
+        canvas.chart.destroy();
+    }
+    canvas.innerHTML = "";
+    var ctx = canvas.getContext('2d');
     var chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -35,7 +40,7 @@ function doughnut_report(n_problems_close, n_problems_open) {
             datasets: [{
                 label: 'Problems',
                 data: [n_problems_close, n_problems_open],
-                backgroundColor: ['#36A2EB', '#FF6384'],
+                backgroundColor: ['#6F2DA8', '#B4DC00'],
                 borderWidth: 0
             }]
         },
@@ -76,6 +81,7 @@ function doughnut_report(n_problems_close, n_problems_open) {
             }
         }
     });
+    canvas.chart = chart;
 
 }
 
