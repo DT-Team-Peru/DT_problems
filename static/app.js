@@ -195,6 +195,7 @@ async function problem_details(problem_id) {
     };
     const url = `https://${tenant}/api/v2/problems/${problem_id}`;
     const jsonDetails = await requestAPI(url, headers);
+    //console.log(jsonDetails);
   
     // Check if rootCauseEntityId and rootCauseEntityType exist before accessing them
     const rootCauseEntityId = jsonDetails.rootCauseEntity?.entityId?.id || 'None';
@@ -212,6 +213,7 @@ async function problem_details(problem_id) {
             <p>Start time: ${new Date(jsonDetails.startTime).toLocaleString('es', date_options)}</p>
             <p>End time: ${jsonDetails.status === 'OPEN' ? 'N/A' : new Date(jsonDetails.endTime).toLocaleString('es', date_options)}</p>
             <p>Status: ${jsonDetails.status}</p>
+            <p>Management Zone: ${jsonDetails.managementZones.map(mz => `${mz.name}`).join(', ')}</p>
           </div>
         </div>
         <div class="row">
@@ -222,7 +224,6 @@ async function problem_details(problem_id) {
                 <li>
                   <p>Impact type: ${impact.impactType}</p>
                   <p>Estimated affected users: ${impact.estimatedAffectedUsers}</p>
-                  <p>Impacted entity ID: ${impact.impactedEntity.entityId}</p>
                   <p>Impacted entity name: ${impact.impactedEntity.name}</p>
                 </li>
               `).join('')}
