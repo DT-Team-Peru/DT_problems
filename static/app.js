@@ -95,8 +95,8 @@ async function report(event) {
         'Content-Type': 'application/json; charset=utf-8',
         "Authorization": "Api-Token " + token
     };
-    from_date = formatDate(document.getElementById('from').value);
-    to_date = formatDate(document.getElementById('to').value);
+    from_date = formatDate(new Date(new Date(document.getElementById('from').value).getTime() + 5*60*60*1000))
+    to_date = formatDate(new Date(new Date(document.getElementById('to').value).getTime() + 5*60*60*1000))
 
     const loadingDiv = document.createElement("div");
     loadingDiv.setAttribute("id", "loading");
@@ -201,7 +201,7 @@ async function problem_details(problem_id) {
     const rootCauseEntityType = jsonDetails.rootCauseEntity?.entityId?.type || 'None';
     const rootCauseEntityName = jsonDetails.rootCauseEntity?.name?.name || 'None';
 
-    const date_options = { timeZone: 'GMT', timeZoneName: 'short', hour12: false };
+    const date_options = { timeZoneName: 'short', hour12: false };
     // Build the HTML for the modal
     const modalBody = `
       <div class="container-fluid">
