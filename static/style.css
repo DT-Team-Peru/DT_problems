@@ -137,3 +137,33 @@ body {
   overflow-x: auto;
   max-width: 100%;
 }
+
+.modal-header {
+  background-color: #00a1b2;
+  color: #fff;
+}
+
+.modal-title {
+  color: #fff;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body h6 {
+  margin-top: 0;
+}
+
+#affectedEntities {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#impactAnalysisTable,
+#recentCommentsTable {
+  margin-top: 10px;
+  overflow: auto;
+  max-height: 200px;
+}

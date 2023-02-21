@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DT Problems</title>
   <link rel="stylesheet" href="static/bootstrap/css/bootstrap.css">
+  <script src="static/bootstrap/js/bootstrap.js"></script>
   <link rel="stylesheet" href="static/style.css">
 </head>
 
@@ -50,6 +51,18 @@
       </div>
       <div class="col-lg-6 col-md-12">
         <canvas id="doughnut-chart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="problemDetailsModal" tabindex="-1" role="dialog"
+    aria-labelledby="problemDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="problemDetailsModalLabel">Problem Details</h5>
+        </div>
+        <div id="problem-details-modal-body" class="modal-body">
+        </div>
       </div>
     </div>
   </div>

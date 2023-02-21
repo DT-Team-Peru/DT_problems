@@ -187,17 +187,74 @@ async function report(event) {
 }
 
 async function problem_details(problem_id) {
-    const popUp = window.open('', 'popUpWindow', 'height=200,width=200');
-
-    tenant = document.getElementById('tenant').value;
-    token = inputValue;
-    var headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        "Authorization": "Api-Token " + token
+    const tenant = document.getElementById('tenant').value;
+    const token = inputValue;
+    const headers = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': `Api-Token ${token}`
     };
-    url = "https://" + tenant + "/api/v2/problems/"+problem_id;
+    const url = `https://${tenant}/api/v2/problems/${problem_id}`;
     const jsonDetails = await requestAPI(url, headers);
-    console.log(jsonDetails);
-    
-    popUp.document.write(jsonDetails.title);
-}
+  
+    // Check if rootCauseEntityId and rootCauseEntityType exist before accessing them
+    const rootCauseEntityId = jsonDetails.rootCauseEntity?.entityId?.id || 'None';
+    const rootCauseEntityType = jsonDetails.rootCauseEntity?.entityId?.type || 'None';
+    const rootCauseEntityName = jsonDetails.rootCauseEntity?.name?.name || 'None';
+
+    const date_options = { timeZone: 'GMT', timeZoneName: 'short', hour12: false };
+    // Build the HTML for the modal
+    const modalBody = `
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <h5>Title: ${jsonDetails.title} (${jsonDetails.affectedEntities.length} affected entities)</h5>
+            <p>Impact level: ${jsonDetails.impactLevel}</p>
+            <p>Start time: ${new Date(jsonDetails.startTime).toLocaleString('es', date_options)}</p>
+            <p>End time: ${jsonDetails.status === 'OPEN' ? 'N/A' : new Date(jsonDetails.endTime).toLocaleString('es', date_options)}</p>
+            <p>Status: ${jsonDetails.status}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <h5>Business impact analysis:</h5>
+            <ul>
+              ${jsonDetails.impactAnalysis.impacts.map(impact => `
+                <li>
+                  <p>Impact type: ${impact.impactType}</p>
+                  <p>Estimated affected users: ${impact.estimatedAffectedUsers}</p>
+                  <p>Impacted entity ID: ${impact.impactedEntity.entityId}</p>
+                  <p>Impacted entity name: ${impact.impactedEntity.name}</p>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+          <div class="col-6">
+            <h5>Root cause:</h5>
+            <p>Root cause entity ID: ${rootCauseEntityId}</p>
+            <p>Root cause entity type: ${rootCauseEntityType}</p>
+            <p>Root cause entity name: ${rootCauseEntityName}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <h5>Recent comments:</h5>
+            <ul>
+              ${jsonDetails.recentComments.comments.map(comment => `
+                <li>
+                  <p>Author: ${comment.author}</p>
+                  <p>Timestamp: ${new Date(comment.timestamp)}</p>
+                  <p>Comment: ${comment.comment}</p>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        </div>
+      </div>
+    `;
+  
+    // Create the modal and show it
+    const modal = new bootstrap.Modal(document.getElementById('problemDetailsModal'));
+    const modalBodyElement = document.getElementById('problem-details-modal-body');
+    modalBodyElement.innerHTML = modalBody;
+    modal.show();
+  }  
