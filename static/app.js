@@ -23,10 +23,11 @@ var inputValue;
 document.getElementById("token").addEventListener("input", Event => {
     inputValue = document.getElementById("token").value;
     document.getElementById("token").value = "**no está permitido ver el token**";
+
 });
 
 // funciones de graficado y publicación de data
-function doughnut_report(n_problems_close, n_problems_open) {
+function doughnut_report1(n_problems_close, n_problems_open) {
     var canvas = document.getElementById('doughnut-chart');
     if (canvas.chart) {
         canvas.chart.destroy();
@@ -91,12 +92,13 @@ async function report(event) {
     tenant = document.getElementById('tenant').value;
     //token = document.getElementById('token').value;
     token = inputValue;
+    document.getElementById("token").style.display = "none";
     var headers = {
         'Content-Type': 'application/json; charset=utf-8',
         "Authorization": "Api-Token " + token
     };
-    from_date = formatDate(new Date(new Date(document.getElementById('from').value).getTime() + 5*60*60*1000))
-    to_date = formatDate(new Date(new Date(document.getElementById('to').value).getTime() + 5*60*60*1000))
+    from_date = formatDate(new Date(new Date(document.getElementById('from').value).getTime() + 5 * 60 * 60 * 1000))
+    to_date = formatDate(new Date(new Date(document.getElementById('to').value).getTime() + 5 * 60 * 60 * 1000))
 
     const loadingDiv = document.createElement("div");
     loadingDiv.setAttribute("id", "loading");
@@ -120,7 +122,13 @@ async function report(event) {
     n_problems_close = problems_details.reduce((count, problem) => problem.status === 'CLOSED' ? count + 1 : count, 0);
     n_problems_open = problems_details.reduce((count, problem) => problem.status === 'OPEN' ? count + 1 : count, 0);
 
-    doughnut_report(n_problems_close, n_problems_open);
+    n_errors = problems_details.reduce((count, problem) => problem.severityLevel === 'ERROR' ? count + 1 : count, 0);
+    n_custom_alerts = problems_details.reduce((count, problem) => problem.severityLevel === 'CUSTOM_ALERT' ? count + 1 : count, 0);
+    n_performance = problems_details.reduce((count, problem) => problem.severityLevel === 'PERFORMANCE' ? count + 1 : count, 0);
+    n_availability = problems_details.reduce((count, problem) => problem.severityLevel === 'AVAILABILITY' ? count + 1 : count, 0);
+    n_resource_contention = problems_details.reduce((count, problem) => problem.severityLevel === 'RESOURCE_CONTENTION' ? count + 1 : count, 0);
+    
+    doughnut_report(n_problems_close, n_problems_open, n_errors, n_custom_alerts, n_performance, n_availability, n_resource_contention)
 
     var container = document.getElementById('hot-app');
     container.innerHTML = "";
@@ -190,13 +198,13 @@ async function problem_details(problem_id) {
     const tenant = document.getElementById('tenant').value;
     const token = inputValue;
     const headers = {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': `Api-Token ${token}`
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Api-Token ${token}`
     };
     const url = `https://${tenant}/api/v2/problems/${problem_id}`;
     const jsonDetails = await requestAPI(url, headers);
     //console.log(jsonDetails);
-  
+
     // Check if rootCauseEntityId and rootCauseEntityType exist before accessing them
     const rootCauseEntityId = jsonDetails.rootCauseEntity?.entityId?.id || 'None';
     const rootCauseEntityType = jsonDetails.rootCauseEntity?.entityId?.type || 'None';
@@ -252,10 +260,96 @@ async function problem_details(problem_id) {
         </div>
       </div>
     `;
-  
+
     // Create the modal and show it
     const modal = new bootstrap.Modal(document.getElementById('problemDetailsModal'));
     const modalBodyElement = document.getElementById('problem-details-modal-body');
     modalBodyElement.innerHTML = modalBody;
     modal.show();
-  }  
+}
+
+function doughnut_report(n_problems_close, n_problems_open, n_errors, n_custom_alerts, n_performance, n_availability, n_resource_contention) {
+    var canvas1 = document.getElementById('doughnut-chart-1');
+    if (canvas1.chart) {
+        canvas1.chart.destroy();
+    }
+    canvas1.innerHTML = "";
+    var ctx1 = canvas1.getContext('2d');
+
+    var data1 = {
+        datasets: [{
+            data: [n_problems_close, n_problems_open],
+            backgroundColor: ["#6F2DA8", "#B4DC00"],
+            label: 'Problems'
+        }],
+        labels: ['Closed', 'Open']
+    };
+    var options1 = {
+        responsive: true,
+        legend: {
+            position: 'right'
+        },
+        title: {
+            display: true,
+            text: 'Open and Closed Problems'
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+    };
+    var chart1 = new Chart(ctx1, {
+        type: 'doughnut',
+        data: data1,
+        options: options1
+    });
+    canvas1.chart = chart1;
+
+    var canvas2 = document.getElementById('doughnut-chart-2');
+    if (canvas2.chart) {
+        canvas2.chart.destroy();
+    }
+    canvas2.innerHTML = "";
+    var ctx2 = canvas2.getContext('2d');
+
+    var data2 = {
+        datasets: [{
+            data: [n_errors, n_custom_alerts, n_performance, n_availability, n_resource_contention],
+            backgroundColor: ["#FF5733", "#FFC300", "#00A6B4", "#BCE55C", "#FF6B6B"],
+            label: 'Severity Levels'
+        }],
+        labels: ['Errors', 'Custom Alerts', 'Performance', 'Availability', 'Resource Contention']
+    };
+    var options2 = {
+        responsive: true,
+        legend: {
+            position: 'right'
+        },
+        title: {
+            display: true,
+            text: 'Severity Levels'
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        },
+        plugins: {
+            doughnutlabel: {
+                labels: [
+                    {
+                        text: 'Severity Levels',
+                        font: {
+                            size: '20'
+                        }
+                    }
+                ]
+            }
+        }
+    };
+    var chart2 = new Chart(ctx2, {
+        type: 'doughnut',
+        data: data2,
+        options: options2
+    });
+    canvas2.chart = chart2;
+}
