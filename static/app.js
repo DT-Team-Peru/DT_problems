@@ -127,7 +127,7 @@ async function report(event) {
     n_performance = problems_details.reduce((count, problem) => problem.severityLevel === 'PERFORMANCE' ? count + 1 : count, 0);
     n_availability = problems_details.reduce((count, problem) => problem.severityLevel === 'AVAILABILITY' ? count + 1 : count, 0);
     n_resource_contention = problems_details.reduce((count, problem) => problem.severityLevel === 'RESOURCE_CONTENTION' ? count + 1 : count, 0);
-    
+
     doughnut_report(n_problems_close, n_problems_open, n_errors, n_custom_alerts, n_performance, n_availability, n_resource_contention)
 
     var container = document.getElementById('hot-app');
@@ -188,7 +188,17 @@ async function report(event) {
         licenseKey: 'non-commercial-and-evaluation',
         stretchH: 'all',
         height: 'auto',
-        width: '100%'
+        width: '100%',
+        // enable exportFile plugin and set options
+        exportFile: {
+            enabled: true,
+            filename: 'table_data',
+            fileExtension: 'csv',
+            columnDelimiter: ',',
+            rowDelimiter: '\r\n',
+            exportHiddenColumns: true,
+            columnHeaders: true
+        }
     });
 
     document.getElementById("loading").remove();
